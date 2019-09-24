@@ -79,6 +79,13 @@ public class MainActivity extends AppCompatActivity implements
                 mLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
 
+        //get the key-value from Firebase message
+       Bundle bundle = getIntent().getExtras();
+       if (bundle != null){
+           String message = bundle.getString("test");
+           Log.d(LOG_TAG, "bundle 'test' message: "+message);
+       }
+
         // Specify an adapter
         mAdapter = new SquawkAdapter();
         mRecyclerView.setAdapter(mAdapter);
