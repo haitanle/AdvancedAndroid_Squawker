@@ -9,7 +9,7 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -21,21 +21,21 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.android.support:appcompat-v7:28.+'
+    implementation 'androidx.appcompat:appcompat:1.0.0'
     testImplementation 'junit:junit:4.12'
 
     // RecyclerView
-    implementation 'com.android.support:recyclerview-v7:28.0.0'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 
     // Schematic dependencies for ContentProvider
     annotationProcessor 'net.simonvt.schematic:schematic-compiler:0.6.3'
     implementation 'net.simonvt.schematic:schematic:0.6.3'
 
     // Preferences Dependencies
-    implementation 'com.android.support:preference-v7:28.0.0'
+    implementation 'androidx.preference:preference:1.0.0'
 
     // done (3) Add the Firebase libraries and apply the GPS plugin in this file. Make sure to save the
     // google.services.json file in the app folder. After syncing the changes, you should be able
@@ -43,7 +43,7 @@ dependencies {
     // background!
     implementation 'com.google.firebase:firebase-messaging:20.0.0'
 
-    implementation 'com.android.support:support-core-utils:28.0.0'
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
 
 }
 
