@@ -17,11 +17,16 @@
 package android.example.com.squawker;
 
 import android.app.Activity;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.example.com.squawker.fcm.SquawkFirebaseInstanceIdService;
 import android.example.com.squawker.following.FollowingPreferenceActivity;
 import android.example.com.squawker.provider.SquawkContract;
 import android.example.com.squawker.provider.SquawkProvider;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.loader.app.LoaderManager;
 import androidx.loader.content.CursorLoader;
@@ -68,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        createNotificationChannel();
+
         mRecyclerView = (RecyclerView) findViewById(R.id.squawks_recycler_view);
 
         // Use this setting to improve performance if you know that changes
@@ -83,6 +90,9 @@ public class MainActivity extends AppCompatActivity implements
                 mRecyclerView.getContext(),
                 mLayoutManager.getOrientation());
         mRecyclerView.addItemDecoration(dividerItemDecoration);
+
+        //load test data
+        loadTestData();
 
         //Get the Firebase token
         FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(MainActivity.this,new OnSuccessListener<InstanceIdResult>() {
@@ -107,6 +117,25 @@ public class MainActivity extends AppCompatActivity implements
         // Start the loader
         getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
 
+    }
+
+    private void loadTestData() {
+        getSupportLoaderManager().initLoader(LOADER_ID_MESSAGES, null, this);
+        ContentValues values = new ContentValues();
+        values.put(SquawkContract.COLUMN_DATE, 13283423L);
+        values.put(SquawkContract.COLUMN_AUTHOR, "Lyla");
+        values.put(SquawkContract.COLUMN_AUTHOR_KEY, SquawkContract.LYLA_KEY);
+        values.put(SquawkContract.COLUMN_MESSAGE,"hello there");
+
+        getContentResolver().insert(SquawkProvider.SquawkMessages.CONTENT_URI,values);
+
+        values = new ContentValues();
+        values.put(SquawkContract.COLUMN_DATE, 947723L);
+        values.put(SquawkContract.COLUMN_AUTHOR, "Cezanne");
+        values.put(SquawkContract.COLUMN_AUTHOR_KEY, SquawkContract.CEZANNE_KEY);
+        values.put(SquawkContract.COLUMN_MESSAGE,"hello I'm Cezanne");
+
+        getContentResolver().insert(SquawkProvider.SquawkMessages.CONTENT_URI,values);
     }
 
     @Override
@@ -151,5 +180,21 @@ public class MainActivity extends AppCompatActivity implements
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.swapCursor(null);
+    }
+
+    private void createNotificationChannel() {
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "channel";
+            String description = "channel description";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("fcm", name, importance);
+            channel.setDescription(description);
+            // Register the channel with the system; you can't change the importance
+            // or other notification behaviors after this
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
     }
 }
