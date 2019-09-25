@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     /**
-     * Loader callbacks
+     * Loader callbacks use to create the sql statement to query based on preference set
      */
 
     @Override
